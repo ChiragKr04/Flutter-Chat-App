@@ -33,6 +33,7 @@ class Messages extends StatelessWidget {
                     FirebaseAuth.instance.currentUser.uid,
                 chatDocs[index]["username"],
                 chatDocs[index]["user_image"],
+                FirebaseAuth.instance.currentUser.metadata.creationTime,
                 key: ValueKey(chatDocs[index].id),
               ),
             );
