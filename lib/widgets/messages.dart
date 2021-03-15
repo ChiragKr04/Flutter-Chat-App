@@ -25,18 +25,38 @@ class Messages extends StatelessWidget {
           reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (ctx, index) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: ChatBubble(
-                chatDocs[index]["text"],
-                chatDocs[index]["userId"] ==
-                    FirebaseAuth.instance.currentUser.uid,
-                chatDocs[index]["username"],
-                chatDocs[index]["user_image"],
-                FirebaseAuth.instance.currentUser.metadata.creationTime,
-                key: ValueKey(chatDocs[index].id),
-              ),
-            );
+            try {
+              print(chatDocs[index]["user_chat_image"]);
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ChatBubble(
+                  chatDocs[index]["text"],
+                  chatDocs[index]["userId"] ==
+                      FirebaseAuth.instance.currentUser.uid,
+                  chatDocs[index]["username"],
+                  chatDocs[index]["user_image"],
+                  chatDocs[index]["user_chat_image"],
+                  FirebaseAuth.instance.currentUser.metadata.creationTime,
+                  key: ValueKey(chatDocs[index].id),
+                ),
+              );
+            } catch (e) {
+              print(e);
+              print(chatDocs[index]["text"]);
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ChatBubble(
+                  chatDocs[index]["text"],
+                  chatDocs[index]["userId"] ==
+                      FirebaseAuth.instance.currentUser.uid,
+                  chatDocs[index]["username"],
+                  chatDocs[index]["user_image"],
+                  "",
+                  FirebaseAuth.instance.currentUser.metadata.creationTime,
+                  key: ValueKey(chatDocs[index].id),
+                ),
+              );
+            }
           },
         );
       },

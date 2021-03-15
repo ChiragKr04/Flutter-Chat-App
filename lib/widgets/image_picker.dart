@@ -24,7 +24,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
             children: [
               ListTile(
                 leading: Icon(Icons.image),
-                title: Text("Pick image from galley"),
+                title: Text("Pick image from gallery"),
                 onTap: () {
                   _pickImage(0);
                   Navigator.of(context).pop();

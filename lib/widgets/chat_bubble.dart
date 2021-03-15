@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/show_user_chat_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +10,9 @@ class ChatBubble extends StatefulWidget {
   final String userName;
   final String userImage;
   final DateTime accountCreation;
+  final String userChatImage;
   ChatBubble(this.message, this.isMe, this.userName, this.userImage,
-      this.accountCreation,
+      this.userChatImage, this.accountCreation,
       {this.key});
 
   @override
@@ -43,6 +45,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   @override
   Widget build(BuildContext context) {
     print("${DateFormat.yMd().format(widget.accountCreation)}");
+    print("${widget.userChatImage}");
     return Padding(
       padding:
           const EdgeInsets.only(top: 15, left: 5.0, right: 5.0, bottom: 10),
@@ -90,9 +93,23 @@ class _ChatBubbleState extends State<ChatBubble> {
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.userName,
-                        ),
+                        if (!widget.isMe)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Text(
+                              widget.userName,
+                              style: TextStyle(
+                                color: Colors.lightBlue.shade400,
+                              ),
+                            ),
+                          ),
+                        if (widget.isMe)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text(
+                              widget.userName,
+                            ),
+                          ),
                         Text(
                           widget.message,
                           style: TextStyle(
@@ -101,6 +118,44 @@ class _ChatBubbleState extends State<ChatBubble> {
                           textAlign:
                               widget.isMe ? TextAlign.end : TextAlign.start,
                         ),
+                        if (widget.userChatImage.trim() != "")
+                          Container(
+                            child: InkWell(
+                              child: Hero(
+                                child: Image.network(
+                                  widget.userChatImage,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                tag: widget.userChatImage,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) =>
+                                        ShowUserChatImage(widget.userChatImage),
+                                  ),
+                                );
+                              },
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                          ),
                       ],
                     ),
                   );
@@ -110,6 +165,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                 top: widget.isMe ? -20 : -20,
                 left: widget.isMe ? -10 : _contHeight.value - 30,
                 child: InkWell(
+                  splashColor: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(30),
                   onTap: () {
                     showDialog(
                         context: context,
@@ -195,17 +252,24 @@ class _ChatBubbleState extends State<ChatBubble> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.green,
-                        width: 2,
-                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 1.0), //(x,y)
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                      // color: Colors.white,
+                      // border: Border.all(
+                      //   color: Colors.green,
+                      //   width: 2,
+                      // ),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(0.5),
                       child: CircleAvatar(
-                        radius: 18,
+                        radius: 20,
                         backgroundImage: NetworkImage(widget.userImage),
                         backgroundColor: Colors.black,
                       ),
