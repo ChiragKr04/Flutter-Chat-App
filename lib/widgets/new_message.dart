@@ -32,12 +32,12 @@ class _NewMessageState extends State<NewMessage> {
           "userId": user.uid,
           "username": userData["username"],
           "user_image": userData["image_url"],
-          "user_chat_image": " ",
+          "user_chat_image": "",
         });
         setState(() {
           _enteredMsg = "";
           _sendMsgController.clear();
-          url = "NO-URL";
+          url = "";
         });
       } else {
         final userData = await FirebaseFirestore.instance

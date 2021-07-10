@@ -196,7 +196,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                                                 0.2,
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.5,
+                                                0.42,
                                       ),
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(15),
